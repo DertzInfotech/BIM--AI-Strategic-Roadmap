@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dertz Infotech | Strategic Growth Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Amber Warm Neutrals -->
+    <!-- Application Structure Plan: A top-down, narrative-driven SPA that guides the user through the strategic pivot. It starts with the current problem (The Service Trap), presents the global market opportunity, introduces the core problem ("Clash Overload"), proposes the "Clash AI" solution, and details the go-to-market plan. This structure transforms the report into a compelling story, making the strategic argument more persuasive and easier to digest than a linear report. Key interactions include a dynamic regional market chart and interactive cards for key concepts, designed to provide layered information on demand. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Regional BIM market share. -> Goal: Compare. -> Viz: Interactive Bar Chart (Chart.js). -> Interaction: Click a region to see detailed drivers. -> Justification: Best for comparing discrete values and providing drill-down info without clutter.
+        - Report Info: AI in Construction market growth. -> Goal: Show Change. -> Viz: Line Chart (Chart.js). -> Justification: Ideal for showing rapid growth trends over time.
+        - Report Info: Clash AI vs. Competitors. -> Goal: Compare. -> Viz: Styled HTML Table. -> Justification: Clearest method for feature-by-feature comparison.
+        - Report Info: Product Roadmap. -> Goal: Organize. -> Viz: HTML/CSS Flexbox Diagram. -> Justification: Visually represents the phased development process effectively.
+        - Report Info: Financial Projections. -> Goal: Show Change/Growth. -> Viz: Multi-Line Chart (Chart.js). -> Justification: Directly visualizes the dramatic revenue shift from the current state to the projected ARR.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 45vh; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .stat-card { transition: all 0.3s ease-in-out; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .nav-link { transition: color 0.2s; }
+        .nav-link:hover { color: #f59e0b; }
+        .tab-button.active { border-color: #f59e0b; color: #f59e0b; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-slate-800 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold">
+                Dertz Infotech <span class="text-amber-400">| Strategic Roadmap</span>
+            </h1>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#pivot" class="nav-link">The Pivot</a>
+                <a href="#market" class="nav-link">Market Opportunity</a>
+                <a href="#solution" class="nav-link">The Solution</a>
+                <a href="#execution" class="nav-link">Execution Plan</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="pivot" class="text-center mb-20 md:mb-32">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-slate-900">From Services to a Scalable Solution</h2>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600 mb-12">
+                This is the strategic pivot from a linear, service-based model to an exponential, product-led future. We will transform Dertz's unique expertise into a high-growth SaaS product, targeting a global market.
+            </p>
+            <div class="chart-container max-w-4xl h-80 md:h-96">
+                <canvas id="revenueProjectionChart"></canvas>
+            </div>
+             <p class="mt-4 text-sm text-slate-500">This chart illustrates the fundamental shift in growth potential between the current service model and the proposed "Clash AI" SaaS product, projecting a transformation from ~$5k to $600k in Annual Recurring Revenue (ARR) within three years.</p>
+        </section>
+
+        <section id="market" class="mb-20 md:mb-32">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Tapping into a Multi-Billion Dollar Market</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">The global AEC industry is rapidly digitizing, creating a massive and growing market for BIM and AI technologies. Our strategy is to focus on the most mature and lucrative region first.</p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-center mb-6">Global BIM Market Analysis: Where to Focus</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3">
+                        <div class="chart-container h-96">
+                            <canvas id="marketShareChart"></canvas>
+                        </div>
+                        <p class="mt-4 text-center text-sm text-slate-500">Click on a region in the chart to explore its specific market drivers and strategic value.</p>
+                    </div>
+                    <div id="region-details" class="lg:col-span-2 bg-slate-100 p-6 rounded-lg flex flex-col justify-center">
+                        <h4 id="region-title" class="text-xl font-bold mb-3 text-slate-800">North America</h4>
+                        <p id="region-description" class="text-slate-600 mb-4">The largest and most mature market. Adoption is driven by powerful government agency mandates (GSA, USACE) that enforce rigorous standards and require data-centric workflows like COBie.</p>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <span class="bg-amber-400 text-amber-900 text-xs font-bold mr-3 px-2.5 py-0.5 rounded-full">Driver</span>
+                                <span id="driver1">Agency Mandates</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="bg-amber-400 text-amber-900 text-xs font-bold mr-3 px-2.5 py-0.5 rounded-full">Driver</span>
+                                <span id="driver2">Efficiency & Cost Focus</span>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <p class="text-sm font-medium text-slate-500">Dertz Opportunity Score</p>
+                            <div class="w-full bg-slate-200 rounded-full h-4 mt-1">
+                                <div id="opportunity-score" class="bg-amber-500 h-4 rounded-full" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="mb-20 md:mb-32">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">The Solution: Clash AI</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">We will build a product that solves one of the most expensive and time-consuming problems in construction: inefficient clash detection.</p>
+            </div>
+            
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl mb-12">
+                 <h3 class="text-2xl font-bold text-center mb-2">The Problem: Clash Overload</h3>
+                 <p class="text-center text-slate-600 mb-6">Standard software generates thousands of clashes, burying critical issues in noise. Teams waste countless hours manually sorting them.</p>
+                 <div class="flex justify-center items-center p-4">
+                    <div class="w-full max-w-lg grid grid-cols-10 gap-2">
+                        <script>
+                            for(let i=0; i<100; i++) {
+                                const isCritical = [7, 23, 58, 81].includes(i);
+                                const color = isCritical ? 'bg-red-500' : 'bg-slate-300';
+                                const animation = isCritical ? 'animate-pulse' : '';
+                                document.write(`<div class="w-6 h-6 rounded-full ${color} ${animation}"></div>`);
+                            }
+                        </script>
+                    </div>
+                 </div>
+                 <p class="text-center mt-4 font-semibold">Clash AI finds the <span class="text-red-500">critical issues</span> automatically.</p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-center mb-6">Competitive Edge: Intelligence over Geometry</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-max text-left">
+                        <thead>
+                            <tr class="border-b border-slate-200">
+                                <th class="p-4 text-sm font-semibold">Feature</th>
+                                <th class="p-4 text-sm font-semibold text-center">Autodesk Navisworks</th>
+                                <th class="p-4 text-sm font-semibold text-center">Solibri</th>
+                                <th class="p-4 text-sm font-semibold text-center bg-amber-100 rounded-t-lg">Clash AI (Proposed)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-200">
+                                <td class="p-4 font-medium">Core Function</td>
+                                <td class="p-4 text-slate-600 text-center">Geometric Detection</td>
+                                <td class="p-4 text-slate-600 text-center">Rule-Based Checking</td>
+                                <td class="p-4 font-bold text-amber-800 text-center bg-amber-50">AI-Powered Prioritization</td>
+                            </tr>
+                            <tr class="border-b border-slate-200">
+                                <td class="p-4 font-medium">Predictive Analytics</td>
+                                <td class="p-4 text-slate-600 text-center">❌ No</td>
+                                <td class="p-4 text-slate-600 text-center">❌ No</td>
+                                <td class="p-4 font-bold text-amber-800 text-center bg-amber-50">✅ Yes</td>
+                            </tr>
+                             <tr class="border-b border-slate-200">
+                                <td class="p-4 font-medium">AI-driven Prioritization</td>
+                                <td class="p-4 text-slate-600 text-center">❌ No</td>
+                                <td class="p-4 text-slate-600 text-center">Limited</td>
+                                <td class="p-4 font-bold text-amber-800 text-center bg-amber-50">✅ Yes</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium">Automated Resolution Suggestions</td>
+                                <td class="p-4 text-slate-600 text-center">❌ No</td>
+                                <td class="p-4 text-slate-600 text-center">❌ No</td>
+                                <td class="p-4 font-bold text-amber-800 text-center bg-amber-50 rounded-b-lg">✅ Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="execution" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">The Execution Plan</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">A phased, 3-year strategy to build, launch, and scale Clash AI into a market leader.</p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl mb-12">
+                <h3 class="text-2xl font-bold text-center mb-8">3-Phase Product Roadmap</h3>
+                <div class="relative w-full">
+                    <div class="absolute left-0 top-1/2 w-full h-1 bg-slate-200 -translate-y-1/2"></div>
+                    <div class="relative flex justify-between">
+                        <div class="text-center w-1/3">
+                            <div class="relative mb-2">
+                                <div class="w-8 h-8 mx-auto bg-amber-500 rounded-full border-4 border-slate-50 flex items-center justify-center text-white font-bold">1</div>
+                            </div>
+                            <h4 class="font-bold">MVP & Integration</h4>
+                            <p class="text-sm text-slate-500">Months 1-6: Build core prioritization engine & Autodesk API.</p>
+                        </div>
+                        <div class="text-center w-1/3">
+                            <div class="relative mb-2">
+                                <div class="w-8 h-8 mx-auto bg-amber-500 rounded-full border-4 border-slate-50 flex items-center justify-center text-white font-bold">2</div>
+                            </div>
+                            <h4 class="font-bold">Beta & Data Acquisition</h4>
+                            <p class="text-sm text-slate-500">Months 7-12: Recruit beta users, gather feedback, refine AI model.</p>
+                        </div>
+                        <div class="text-center w-1/3">
+                            <div class="relative mb-2">
+                                <div class="w-8 h-8 mx-auto bg-amber-500 rounded-full border-4 border-slate-50 flex items-center justify-center text-white font-bold">3</div>
+                            </div>
+                            <h4 class="font-bold">Commercial Launch</h4>
+                            <p class="text-sm text-slate-500">Months 13-24: Launch in North America, expand features.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl">
+                    <h3 class="text-2xl font-bold text-center mb-6">Target Audience & Personas</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-100 rounded-lg">
+                            <h4 class="font-bold">Victor the VDC Coordinator (User)</h4>
+                            <p class="text-sm text-slate-600">Overwhelmed by manual clash reports. Wants tools that save time and make him more effective.</p>
+                        </div>
+                        <div class="p-4 bg-slate-100 rounded-lg">
+                            <h4 class="font-bold">Penelope the Project Manager (Buyer)</h4>
+                            <p class="text-sm text-slate-600">Accountable for budget and schedule. Motivated by clear ROI and risk reduction.</p>
+                        </div>
+                         <div class="p-4 bg-slate-100 rounded-lg">
+                            <h4 class="font-bold">Sam the SMB Owner (Decision Maker)</h4>
+                            <p class="text-sm text-slate-600">Focused on profitability and competitive advantage. Wants simple, powerful solutions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl">
+                    <h3 class="text-2xl font-bold text-center mb-6">Disruptive Pricing Strategy</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 border-2 border-slate-200 rounded-lg text-center">
+                            <h4 class="font-bold text-lg">Freemium</h4>
+                            <p class="text-slate-600">1 User, 1 Project</p>
+                            <p class="text-2xl font-bold mt-2">Free</p>
+                            <p class="text-xs text-slate-500">For trial and lead generation</p>
+                        </div>
+                        <div class="p-4 border-2 border-amber-500 rounded-lg text-center relative">
+                             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</div>
+                            <h4 class="font-bold text-lg">Pro Tier</h4>
+                            <p class="text-slate-600">Small Teams, 5 Projects</p>
+                            <p class="text-2xl font-bold mt-2">$299<span class="text-base font-normal text-slate-500">/mo</span></p>
+                            <p class="text-xs text-slate-500">Full prioritization engine</p>
+                        </div>
+                        <div class="p-4 border-2 border-slate-200 rounded-lg text-center">
+                            <h4 class="font-bold text-lg">Business Tier</h4>
+                            <p class="text-slate-600">Company-wide, 20 Projects</p>
+                            <p class="text-2xl font-bold mt-2">$799<span class="text-base font-normal text-slate-500">/mo</span></p>
+                            <p class="text-xs text-slate-500">Collaboration & analytics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+    
+    <footer class="bg-slate-800 text-white">
+        <div class="container mx-auto px-6 py-4 text-center text-sm">
+            <p>&copy; 2025 Dertz Infotech. Confidential Strategic Plan.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const marketData = {
+                regions: ['North America', 'Europe', 'Asia-Pacific', 'Middle East'],
+                shares: [38, 28, 26, 12],
+                details: {
+                    'North America': {
+                        description: 'The largest and most mature market. Adoption is driven by powerful government agency mandates (GSA, USACE) that enforce rigorous standards and require data-centric workflows like COBie.',
+                        drivers: ['Agency Mandates', 'Efficiency & Cost Focus'],
+                        score: 100
+                    },
+                    'Europe': {
+                        description: 'A strong, regulation-driven market with national mandates (UK, Germany) and a focus on sustainability through the EU Green Deal. High value on standardization (ISO 19650).',
+                        drivers: ['National Mandates', 'Sustainability (Green Deal)'],
+                        score: 80
+                    },
+                    'Asia-Pacific': {
+                        description: 'The fastest-growing but most fragmented market. Growth is fueled by rapid urbanization and infrastructure booms, but standards and practices vary widely.',
+                        drivers: ['Rapid Urbanization', 'Infrastructure Boom'],
+                        score: 40
+                    },
+                    'Middle East': {
+                        description: 'A dynamic market driven by ambitious government-funded mega-projects (e.g., NEOM). Focus on high-end, advanced technology like Digital Twins.',
+                        drivers: ['Mega-Projects', 'Advanced Tech Adoption'],
+                        score: 60
+                    }
+                }
+            };
+
+            const revenueData = {
+                labels: ['Current', 'Year 1', 'Year 2', 'Year 3'],
+                serviceModel: [4800, 5000, 5200, 5500],
+                saasModel: [0, 0, 144000, 600000]
+            };
+
+            const renderRevenueChart = () => {
+                const ctx = document.getElementById('revenueProjectionChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: revenueData.labels,
+                        datasets: [{
+                            label: 'Current Service Model (ARR)',
+                            data: revenueData.serviceModel,
+                            borderColor: '#64748b',
+                            backgroundColor: '#64748b20',
+                            fill: true,
+                            tension: 0.1
+                        }, {
+                            label: 'Clash AI SaaS Model (Projected ARR)',
+                            data: revenueData.saasModel,
+                            borderColor: '#f59e0b',
+                            backgroundColor: '#f59e0b20',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        return '$' + (value / 1000) + 'k';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Projected Revenue Growth: Service vs. SaaS',
+                                font: { size: 16 }
+                            },
+                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const renderMarketChart = () => {
+                const ctx = document.getElementById('marketShareChart').getContext('2d');
+                const marketChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: marketData.regions,
+                        datasets: [{
+                            label: 'Global BIM Market Share (%)',
+                            data: marketData.shares,
+                            backgroundColor: [
+                                '#f59e0b',
+                                '#fbbf24',
+                                '#fcd34d',
+                                '#fde68a',
+                            ],
+                            borderColor: [
+                                '#d97706',
+                                '#f59e0b',
+                                '#fbbf24',
+                                '#fcd34d'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Market Share (%)' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Click a Region to See Details',
+                                font: { size: 14, style: 'italic' },
+                                color: '#64748b'
+                            }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const index = elements[0].index;
+                                const regionName = marketData.regions[index];
+                                updateRegionDetails(regionName);
+                            }
+                        }
+                    }
+                });
+            };
+
+            const updateRegionDetails = (regionName) => {
+                const details = marketData.details[regionName];
+                if (!details) return;
+
+                document.getElementById('region-title').textContent = regionName;
+                document.getElementById('region-description').textContent = details.description;
+                document.getElementById('driver1').textContent = details.drivers[0];
+                document.getElementById('driver2').textContent = details.drivers[1];
+                document.getElementById('opportunity-score').style.width = `${details.score}%`;
+            };
+
+            renderRevenueChart();
+            renderMarketChart();
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
